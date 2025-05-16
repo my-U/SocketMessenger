@@ -1,0 +1,4 @@
+CREATE DATABASE example;
+
+CREATE USER username WITH PASSWORD 'password';
+GRANT ALL PRIVILEGES ON DATABASE example TO username;

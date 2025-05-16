@@ -1,0 +1,51 @@
+# application-example.yml
+# ⚠ 이 파일은 예시입니다.
+# 'application.yml'로 이름을 바꾸고
+# 프로젝트에 맞게 값을 입력하여 사용하세요.
+
+spring:
+  application:
+    name: app # 🔧 어플리케이션 이름 설정 (필수 수정)
+
+  servlet:
+    multipart:
+      max-file-size: 10MB  # 업로드 가능한 최대 파일 크기
+      max-request-size: 30MB  # 하나의 요청에서 허용되는 최대 용량
+
+  jpa:
+    open-in-view: false  # Open EntityManager In View 비활성화 (N+1 문제 예방)
+    hibernate:
+      format_sql: true  # SQL을 보기 좋게 포맷팅
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl  # 기본 네이밍 전략 사용 (DB 컬럼명 일관성 확보)
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true  # HTML Form에서 PUT, DELETE 등의 HTTP 메서드를 사용 가능하게 함
+    static-path-pattern: "/static/**"  # 정적 리소스 경로 패턴 설정
+
+  messages:
+    basename: classpath:messages  # 다국어 메시지 번들 설정
+
+  config:
+    import: optional:classpath:application-secret.yml  # 비밀 정보(yml) 파일 병합 (DB, JWT 등)
+
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE}  # 활성화할 프로파일 설정 (dev, prod 등)
+
+management:
+  endpoints:
+    web:
+      base-path: "/actuator/profiler"  # Actuator 엔드포인트 기본 경로 설정
+
+server:
+  tomcat:
+    use-relative-redirects: true  # 상대 경로 리다이렉트 사용 (리버스 프록시 환경 대응)
+
+  error:
+    whitelabel:
+      enabled: false  # 기본 Whitelabel 에러 페이지 비활성화
+
+media-type:
+  json: "application/json;charset=UTF-8"

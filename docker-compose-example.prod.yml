@@ -1,0 +1,79 @@
+# docker-compose-example.prod.yml
+# ⚠ 이 파일은 예시입니다.
+# 'docker-compose.prod.yml'로 이름을 바꾸고
+# 프로젝트에 맞게 값을 입력하여 사용하세요.
+
+services: # 생성되는 순서 중요
+
+  # MySQL 서비스
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container # 🔧 프로젝트에 맞게 값을 설정 해주세요.
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE}
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+
+  # PostgreSQL 서비스 (필요 시 주석 해제)
+  # postgres:
+  #   image: postgres:15
+  #   container_name: postgresql-container # 🔧 프로젝트에 맞게 값을 설정 해주세요.
+  #   environment:
+  #     POSTGRES_DB: ${DATABASE}
+  #     POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+  #   ports:
+  #     - "5432:5432"
+  #   # volumes:
+  #   #   - ./postgres-data:/var/lib/postgresql/data
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka-container # 🔧 프로젝트에 맞게 값을 설정 해주세요.
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper-container # 🔧 프로젝트에 맞게 값을 설정 해주세요.
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"
+
+  # Redis 서비스
+  redis:
+    image: redis:latest
+    container_name: redis-container # 🔧 프로젝트에 맞게 값을 설정 해주세요.
+    ports:
+      - "6379:6379"
+
+  # Spring Boot 애플리케이션
+  app: # 🔧 프로젝트에 맞게 값을 설정 해주세요.
+    image: app-image:latest # 🔧 프로젝트에 맞게 값을 설정 해주세요.
+    container_name: app-container # 🔧 프로젝트에 맞게 값을 설정 해주세요.
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      # - postgres  # 사용할 DB에 따라 주석 처리 조정
+      - redis
+    env_file:
+      - .env.common
+      - .env.prod
+    environment:  # 🔧 프로젝트에 맞게 .env.prod 파일의 값으로 변경해주세요.
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_REDIS_HOST: ${SPRING_REDIS_HOST}
+      SPRING_REDIS_PORT: ${SPRING_REDIS_PORT}

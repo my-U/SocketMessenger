@@ -1,0 +1,143 @@
+name: CI/CD Pipeline For Develop
+
+on:
+  push:
+    branches:
+      - main # master branch 에 push 가 성공적으로 발생했을 때 아래의 jobs 을 실행
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis:7.0
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code  # GitHub repo의 코드를 가상머신에 clone
+        uses: actions/checkout@v4.1.7
+
+      - name: Set up JDK 21  # JDK 21 설치 (Corretto 배포판)
+        uses: actions/setup-java@v4.2.2
+        with:
+          java-version: '21'           # 🔧 필요에 따라 JDK 버전을 조정하세요.
+          distribution: 'corretto'     # 🔧 다른 배포판(OpenJDK, temurin 등)을 사용할 경우 수정하세요.
+          cache: gradle  # Gradle 의존성 캐시 재사용으로 빌드 속도 향상
+
+      - name: Create .env.common # .env.common 복원
+        run: echo "${{ secrets.ENV_COMMON_FILE }}" | base64 --decode > .env.common
+
+      - name: Create .env.prod # .env.prod 복원
+        run: echo "${{ secrets.ENV_PROD_FILE }}" | base64 --decode > .env.prod
+
+      - name: Create application-secret.yml # application-secret.yml 복원
+        run: echo "${{ secrets.SECRET_FILE }}" | base64 --decode > ./src/main/resources/application-secret.yml
+
+      - name: Set executable permissions for gradlew  # 테스트 코드 실행을 위해 gradlew 실행 권한 부여
+        run: chmod +x ./gradlew
+
+      - name: Wait for Redis to be ready  # Redis 컨테이너가 준비될 때까지 대기 (테스트 시 사용될 수 있음)
+        run: |
+          timeout 30s bash -c 'until nc -z localhost 6379; do sleep 1; done' || {
+            echo "Redis is not ready. Failing the build."; exit 1;
+          }
+
+      - name: Run tests  # 테스트 코드 실행
+        run: ./gradlew test
+
+      - name: Upload test results  # 테스트 결과를 아티팩트로 업로드 (필수는 아님)
+        if: always()
+        uses: actions/upload-artifact@v4.4.3
+        with:
+          name: test-results
+          path: build/reports/tests/test/
+
+      - name: Set up Docker Buildx  # Docker Buildx 설정 (멀티 플랫폼 빌드 지원)
+        uses: docker/setup-buildx-action@v3.7.1
+
+      - name: Log in to Docker Hub  # Docker Hub 로그인 (이미지 push를 위해 필요)
+        uses: docker/login-action@v3.3.0
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Build JAR  # Spring Boot 애플리케이션 JAR 빌드
+        run: ./gradlew bootJar
+
+      - name: Build and Push Docker image  # 도커 이미지 빌드 및 Docker Hub에 push
+        uses: docker/build-push-action@v6.9.0
+        with:
+          context: .
+          push: true
+          tags: your-dockerhub-username/your-image-name:latest # 🔧 Docker Hub에 맞게 사용자명과 이미지명을 수정하세요.
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Slack 알림 기능 사용 시 주석 해제
+#      - name: Send Slack notification for build
+#        if: always()
+#        run: |
+#          if [ "${{ job.status }}" == "success" ]; then
+#            STATUS="✅ Build succeeded!"
+#            MESSAGE="$STATUS Commit: ${{ github.event.head_commit.message }} (ID: ${{ github.event.head_commit.id }})"
+#          else
+#            STATUS="❌ Build failed!"
+#            # 에러 로그에서 실패 위치 줄만 뽑기 (클래스, 에러, 예외 포함)
+#            LOG=$(grep -iE "Exception|Error|at " docker-build.log | tail -n 10 | sed 's/"/\\"/g')
+#            MESSAGE="$STATUS Commit: ${{ github.event.head_commit.message }} (ID: ${{ github.event.head_commit.id }})\n\`\`\`${LOG}\`\`\`"
+#          fi
+#
+#          curl -X POST -H 'Content-type: application/json' \
+#            --data "{\"text\": \"$MESSAGE\"}" \
+#            ${{ secrets.SLACK_CICD_WEBHOOK }}
+
+  deploy:
+    needs: build  # build job 성공 시에만 실행됨
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH to Server and Deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ~/your-project-directory # 프로젝트별 docker-compose.yml 파일을 다운 받을 디렉토리로 수정하세요.
+            
+            # docker-compose.yml 다운로드
+            curl -o docker-compose.yml https://raw.githubusercontent.com/your-username/your-repo-name/main/docker-compose.yml  # 🔧 사용자명, 레포명, 브랜치명을 실제 환경에 맞게 수정하세요.
+            
+            # .env 파일 복원
+            echo "${{ secrets.ENV_COMMON_FILE }}" | base64 --decode > .env.common
+            echo "${{ secrets.ENV_PROD_FILE }}" | base64 --decode > .env.prod
+
+            # .env 파일로 합치기 - docker-compose.yml 파일의 ${VAR} 형식은 .env 파일만 인식하기 때문
+            cat .env.prod .env.common > .env
+            
+            # 최신 이미지 pull + 컨테이너 재시작
+            docker pull your-dockerhub-username/your-image-name:latest
+            docker compose up -d
+
+            # 사용되지 않는(dangling) 이미지 정리
+            docker image prune -f
+            
+            # .env 파일 삭제
+            rm .env .env.common .env.prod
+
+      # Slack 알림 기능 사용 시 주석 해제
+#      - name: Notify Slack
+#        if: always() # 성공이든 실패든 무조건 실행
+#        run: |
+#          if [ "${{ job.status }}" == "success" ]; then
+#            MESSAGE="✅ Deploy succeeded!"
+#          else
+#            MESSAGE="❌ Deploy failed!"
+#          fi
+#
+#          curl -X POST -H 'Content-type: application/json' \
+#          --data "{\"text\":\"$MESSAGE\"}" \
+#          ${{ secrets.SLACK_CICD_WEBHOOK }}

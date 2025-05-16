@@ -1,0 +1,56 @@
+# application-dev-example.yml
+# ⚠ 이 파일은 예시입니다.
+# 'application-dev.yml'로 이름을 바꾸고
+# 프로젝트에 맞게 값을 입력하여 사용하세요.
+
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update  # 개발 중에는 스키마 자동 반영
+
+  thymeleaf:
+    cache: false  # 템플릿 캐싱 비활성화 (개발 편의)
+
+  h2:
+    console:
+      enabled: true  # H2 콘솔 활성화 (개발용)
+
+  mvc:
+    log-resolved-exception: true
+
+management:
+  metrics:
+    profiler:
+      enabled: true  # Actuator 프로파일러 활성화
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # 모든 Actuator 엔드포인트 노출 (주의: dev에서만)
+
+server:
+  servlet:
+    session:
+      cookie:
+        http-only: false  # 쿠키 자바스크립트 접근 허용 (개발 중 디버깅용)
+
+# Hibernate SQL 로그 출력
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        web: DEBUG
+        web.servlet.DispatcherServlet: DEBUG
+        security: DEBUG
+        beans: DEBUG
+        jdbc.core.JdbcTemplate: DEBUG
+        transaction: DEBUG
+      hibernate:
+        SQL: DEBUG
+        type.descriptor.sql.BasicBinder: TRACE
+      apache:
+        coyote.http11: WARN
+        tomcat.util.net: WARN
+
+

@@ -1,0 +1,55 @@
+# application-prod-example.yml
+# ⚠ 이 파일은 예시입니다.
+# 'application-prod.yml'로 이름을 바꾸고
+# 프로젝트에 맞게 값을 입력하여 사용하세요.
+
+spring:
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none  # 운영 DB에 직접 반영 금지
+
+  thymeleaf:
+    cache: true  # 템플릿 캐싱 활성화 (성능 향상)
+
+  h2:
+    console:
+      enabled: false  # 보안상 H2 콘솔 비활성화
+
+management:
+  metrics:
+    profiler:
+      enabled: false  # 운영에서는 꺼두기
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"  # 최소한의 actuator만 노출
+
+server:
+  servlet:
+    session:
+      cookie:
+        http-only: true  # 보안 목적의 HttpOnly 쿠키
+
+# 운영 환경에서는 로그를 줄여서 설정
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        web: INFO
+        web.servlet.DispatcherServlet: INFO
+        security: WARN
+        beans: INFO
+        jdbc.core.JdbcTemplate: WARN
+        transaction: WARN
+      hibernate:
+        SQL: WARN
+        type.descriptor.sql.BasicBinder: OFF
+      apache:
+        coyote.http11: ERROR
+        tomcat.util.net: ERROR
+
+  file:
+    name: logs/app.log  # 운영에서는 파일로 로그 저장
+

@@ -1,0 +1,35 @@
+# Dockerfile-example
+# ⚠ 이 파일은 예시입니다.
+# 'Dockerfile'로 이름을 바꾸고
+# 프로젝트에 맞게 값을 입력하여 사용하세요.
+
+# Ubuntu 기반 (Ubuntu 22.04, Jammy Jellyfish)
+#FROM eclipse-temurin:21-jdk-jammy
+
+# Debian Slim
+# FROM eclipse-temurin:21-jdk
+
+# Alpine 기반
+# FROM eclipse-temurin:21-jdk-alpine
+
+# Amazon Linux
+# FROM amazoncorretto:21
+
+# Red Hat UBI
+# FROM registry.access.redhat.com/ubi8/ubi # ubi8/ubi 이미지와 rockylinux 이미지에는 jdk가 들어있지 않기 때문에 RUN 으로 jdk 설치 필요
+# RUN microdnf install -y java-21-openjdk && microdnf clean all
+
+# Rocky 기반
+# FROM rockylinux:9
+# RUN dnf install -y java-21-openjdk
+
+# --------------------------------------------------------------------------------------------------
+
+WORKDIR /app
+
+# 빌드된 JAR 파일을 복사 (예: build/libs/my-app.jar)
+ARG JAR_FILE=build/libs/*.jar
+COPY ${JAR_FILE} app.jar
+
+# 애플리케이션 실행
+ENTRYPOINT ["java", "-jar", "app.jar"]
