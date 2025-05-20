@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.PatternTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 
 @Configuration
 public class RedisConfig {
@@ -19,5 +22,23 @@ public class RedisConfig {
         RedisTemplate<String, String> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
         return template;
+    }
+
+    @Bean
+    public RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory, MessageListenerAdapter adapter) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(adapter, new PatternTopic("chat"));
+        return container;
+    }
+
+    @Bean
+    public MessageListenerAdapter adapter(RedisSubscriber subscriber) {
+        return new MessageListenerAdapter(subscriber, "onMessage");
+    }
+
+    @Bean
+    public RedisSubscriber redisSubscriber() {
+        return new RedisSubscriber();
     }
 }
