@@ -7,6 +7,7 @@ on:
 
 jobs:
   build:
+    if: false # 무조건 실행 안됨. 임시 비활성화
     runs-on: ubuntu-latest
 
     services:
