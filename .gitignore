@@ -39,3 +39,13 @@ application-secret.yml
 
 ### VS Code ###
 .vscode/
+
+# DB 볼륨 데이터
+mysql-data/
+postgresql-data/
+
+# DB User 초기화 스크립트
+mysql-init/init-dev.sql
+mysql-init/init-prod.sql
+postgresql-init/init-dev.sql
+postgresql-init/init-prod.sql

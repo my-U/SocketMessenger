@@ -11,10 +11,10 @@ services: # 생성되는 순서 중요
     container_name: mysql-container # 🔧 프로젝트에 맞게 값을 설정 해주세요.
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DATABASE}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_HOST: '%'
     ports:
-      - "3306:3306"
+      - "3307:3307"
     volumes:
       - ./mysql-data:/var/lib/mysql
       - ./mysql-init/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -24,13 +24,13 @@ services: # 생성되는 순서 중요
     image: postgres:15
     container_name: postgresql-container # 🔧 프로젝트에 맞게 값을 설정 해주세요.
     environment:
-      POSTGRES_DB: ${DATABASE}
+      POSTGRES_DB: ${POSTGRESQL_DATABASE}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
-      - ./postgres-init/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgresql-data:/var/lib/postgresql/data
+      - ./postgresql-init/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   kafka:
     image: confluentinc/cp-kafka:latest

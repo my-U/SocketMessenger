@@ -1,5 +1,0 @@
-CREATE DATABASE IF NOT EXISTS example;
-
-CREATE USER IF NOT EXISTS 'username'@'%' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON example.* TO 'username'@'%';
-FLUSH PRIVILEGES;
