@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * JWT 인증 필터
@@ -26,7 +27,14 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    public static final String NO_CHECK_URLS = "/member/login";
+    private static final List<String> NO_CHECK_URLS = List.of(
+            "/member/login",
+            "/member/register",
+            "/auth/v1/token",
+            "/swagger-ui",         // Swagger 접근 시 필요
+            "/v3/api-docs",        // OpenAPI 문서 접근 시 필요
+            "/actuator/health"     // 헬스체크 허용
+    );
     private final JwtService jwtService;
     private final CustomUserDetailsService customUserDetailsService;
 
