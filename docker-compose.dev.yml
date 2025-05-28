@@ -17,7 +17,6 @@ services: # 생성되는 순서 중요
       - "3307:3307"
     volumes:
       - ./mysql-data:/var/lib/mysql
-      - ./mysql-init/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   # PostgreSQL 서비스 (필요 시 주석 해제)
   postgres:
@@ -30,7 +29,6 @@ services: # 생성되는 순서 중요
       - "5432:5432"
     volumes:
       - ./postgresql-data:/var/lib/postgresql/data
-      - ./postgresql-init/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   kafka:
     image: confluentinc/cp-kafka:latest
