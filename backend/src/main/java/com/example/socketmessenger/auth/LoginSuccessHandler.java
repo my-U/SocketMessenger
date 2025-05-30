@@ -13,11 +13,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import java.io.IOException;
+import java.time.Duration;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,12 +28,16 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final JwtService jwtService;
     private final ObjectMapper objectMapper;
     private final MemberRepository memberRepository;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Value("${jwt.TOKEN_PREFIX}")
     private String TOKEN_PREFIX;
 
     @Value("${media-type.json}")
     private String mediaTypeJson;
+
+    @Value("${jwt.REFRESH.EXPIRATION_TIME}")
+    private long REFRESH_EXPIRATION_TIME;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -53,6 +59,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
                 .build();
 
         String refreshToken = jwtService.createRefreshToken(accountId);
+
+        redisTemplate.opsForValue().set("REFRESH_TOKEN:" + accountId, refreshToken, Duration.ofMillis(REFRESH_EXPIRATION_TIME));
 
         jwtService.sendRefreshToken(response, refreshToken);
         response.setContentType(mediaTypeJson);
