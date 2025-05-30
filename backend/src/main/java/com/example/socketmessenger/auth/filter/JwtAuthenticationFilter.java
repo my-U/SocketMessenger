@@ -28,9 +28,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final List<String> NO_CHECK_URLS = List.of(
-            "/member/login",
+            "/auth/login",
             "/member/register",
-            "/auth/v1/token",
+            "/auth/token",
             "/swagger-ui",         // Swagger 접근 시 필요
             "/v3/api-docs",        // OpenAPI 문서 접근 시 필요
             "/actuator/health"     // 헬스체크 허용
