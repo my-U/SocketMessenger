@@ -1,10 +1,8 @@
 package com.example.socketmessenger.auth.service;
 
-import com.example.socketmessenger.auth.JwtService;
 import com.example.socketmessenger.auth.dto.request.CheckDuplicateIdDto;
 import com.example.socketmessenger.auth.dto.response.TokenResponseDto;
 import com.example.socketmessenger.exception.UnauthorizedException;
-import com.example.socketmessenger.member.entity.Member;
 import com.example.socketmessenger.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

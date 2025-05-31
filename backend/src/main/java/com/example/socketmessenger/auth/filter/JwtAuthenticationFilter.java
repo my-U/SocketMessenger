@@ -1,8 +1,8 @@
 package com.example.socketmessenger.auth.filter;
 
 import com.example.socketmessenger.exception.UnauthorizedException;
-import com.example.socketmessenger.auth.CustomUserDetailsService;
-import com.example.socketmessenger.auth.JwtService;
+import com.example.socketmessenger.auth.service.CustomUserDetailsService;
+import com.example.socketmessenger.auth.service.JwtService;
 import com.example.socketmessenger.util.enums.ErrorResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

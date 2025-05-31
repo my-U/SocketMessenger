@@ -1,4 +1,4 @@
-package com.example.socketmessenger.auth;
+package com.example.socketmessenger.auth.service;
 
 import com.example.socketmessenger.member.entity.Member;
 import com.example.socketmessenger.repository.MemberRepository;

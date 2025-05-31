@@ -1,6 +1,6 @@
 package com.example.socketmessenger;
 
-import com.example.socketmessenger.auth.JwtService;
+import com.example.socketmessenger.auth.service.JwtService;
 import com.example.socketmessenger.config.RedisPublisher;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,5 +1,6 @@
-package com.example.socketmessenger.auth;
+package com.example.socketmessenger.auth.handler;
 
+import com.example.socketmessenger.auth.service.JwtService;
 import com.example.socketmessenger.member.entity.Member;
 import com.example.socketmessenger.auth.dto.response.LoginSuccessMemberDto;
 import com.example.socketmessenger.auth.dto.response.LoginSuccessDto;

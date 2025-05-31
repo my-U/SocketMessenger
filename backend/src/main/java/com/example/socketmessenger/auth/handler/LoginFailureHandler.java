@@ -1,4 +1,4 @@
-package com.example.socketmessenger.auth;
+package com.example.socketmessenger.auth.handler;
 
 import com.example.socketmessenger.util.ResponseUtil;
 import com.example.socketmessenger.util.enums.ErrorCode;

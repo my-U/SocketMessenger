@@ -2,10 +2,10 @@ package com.example.socketmessenger.config;
 
 
 import com.example.socketmessenger.repository.MemberRepository;
-import com.example.socketmessenger.auth.CustomUserDetailsService;
-import com.example.socketmessenger.auth.JwtService;
-import com.example.socketmessenger.auth.LoginFailureHandler;
-import com.example.socketmessenger.auth.LoginSuccessHandler;
+import com.example.socketmessenger.auth.service.CustomUserDetailsService;
+import com.example.socketmessenger.auth.service.JwtService;
+import com.example.socketmessenger.auth.handler.LoginFailureHandler;
+import com.example.socketmessenger.auth.handler.LoginSuccessHandler;
 import com.example.socketmessenger.auth.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.example.socketmessenger.auth.filter.JwtAuthenticationFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;

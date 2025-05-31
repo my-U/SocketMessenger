@@ -1,6 +1,6 @@
 package com.example.socketmessenger;
 
-import com.example.socketmessenger.auth.JwtService;
+import com.example.socketmessenger.auth.service.JwtService;
 import com.example.socketmessenger.chat.AuthHandler;
 import com.example.socketmessenger.chat.ChatHandler;
 import com.example.socketmessenger.config.RedisPublisher;
@@ -38,7 +38,7 @@ public class NettyServer {
                         ch.pipeline().addLast(new HttpObjectAggregator(65536));
                         ch.pipeline().addLast(new WebSocketServerProtocolHandler("/ws"));
                         ch.pipeline().addLast(new AuthHandler(jwtService)); // JWT 인증 처리
-                        ch.pipeline().addLast(new ChatHandler(redisPublisher)); // 메시지 처리
+                        ch.pipeline().addLast(new ChatHandler()); // 메시지 처리
                     }
                 });
 

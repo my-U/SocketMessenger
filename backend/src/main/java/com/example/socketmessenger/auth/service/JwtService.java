@@ -1,4 +1,4 @@
-package com.example.socketmessenger.auth;
+package com.example.socketmessenger.auth.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTVerificationException;
