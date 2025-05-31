@@ -31,6 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/auth/login",
             "/member/register",
             "/auth/token",
+            "/auth/checkDuplicateId",
             "/swagger-ui",         // Swagger 접근 시 필요
             "/v3/api-docs",        // OpenAPI 문서 접근 시 필요
             "/actuator/health"     // 헬스체크 허용

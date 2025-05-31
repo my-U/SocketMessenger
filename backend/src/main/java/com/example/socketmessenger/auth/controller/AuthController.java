@@ -1,5 +1,6 @@
 package com.example.socketmessenger.auth.controller;
 
+import com.example.socketmessenger.auth.dto.request.CheckDuplicateIdDto;
 import com.example.socketmessenger.auth.dto.response.TokenResponseDto;
 import com.example.socketmessenger.auth.service.AuthService;
 import com.example.socketmessenger.util.ResponseUtil;
@@ -18,6 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+
+    @PostMapping("checkDuplicateId")
+    public ResponseEntity<?> checkDuplicateId(CheckDuplicateIdDto checkDuplicateIdDto) {
+        authService.checkDuplicateId(checkDuplicateIdDto); // 토큰 블랙리스트 등 처리
+        return ResponseUtil.createSuccessResponse(SuccessCode.SELECT_SUCCESS);
+    }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {

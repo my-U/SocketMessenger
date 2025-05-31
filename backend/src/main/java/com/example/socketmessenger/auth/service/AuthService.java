@@ -1,8 +1,11 @@
 package com.example.socketmessenger.auth.service;
 
 import com.example.socketmessenger.auth.JwtService;
+import com.example.socketmessenger.auth.dto.request.CheckDuplicateIdDto;
 import com.example.socketmessenger.auth.dto.response.TokenResponseDto;
 import com.example.socketmessenger.exception.UnauthorizedException;
+import com.example.socketmessenger.member.entity.Member;
+import com.example.socketmessenger.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,12 +22,21 @@ public class AuthService {
 
     private final JwtService jwtService;
     private final RedisTemplate<String, String> redisTemplate;
+    private final MemberRepository memberRepository;
 
     @Value("${jwt.TOKEN_PREFIX}")
     private String TOKEN_PREFIX;
 
     @Value("${jwt.USE_BLACKLIST}")
     private boolean useBlacklist;
+
+    /**
+     * 아이디 중복 확인
+     **/
+    @Transactional
+    public boolean checkDuplicateId(CheckDuplicateIdDto checkDuplicateIdDto) {
+        return memberRepository.findByAccountId(checkDuplicateIdDto.getAccountId()).isPresent();
+    }
 
     /**
      * 로그아웃 처리: RefreshToken 제거 + AccessToken 블랙리스트 처리

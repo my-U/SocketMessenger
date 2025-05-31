@@ -60,8 +60,8 @@ public class SecurityConfig {
                 // 세션 사용하지 않으므로 STATELESS 설정
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(new AntPathRequestMatcher("/auth/token")).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/member/register", "/auth/login").permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/member/register").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()) //여기 부분 다시 고민해보자
                 // 원래 스프링 시큐리티 필터 순서가 LogoutFilter 이후에 로그인 필터 동작
