@@ -6,10 +6,6 @@ export interface LoginResponse {
     token: string;
 }
 
-interface DuplicateCheckResponse {
-    isDuplicate: boolean;
-}
-
 export const login = async (
     accountId: string,
     password: string
@@ -31,10 +27,10 @@ export const register = async (accountId: string, password: string) => {
 
 export const checkDuplicateId = async (
     accountId: string
-): Promise<DuplicateCheckResponse> => {
-    const res = await axios.post<DuplicateCheckResponse>(
+): Promise<boolean> => {
+    const res = await axios.post<{ status: number; message: string; data: boolean }>(
         `${BASE_URL}/auth/checkDuplicateId`,
         { accountId }
     );
-    return res.data;
+    return res.data.data;
 };
