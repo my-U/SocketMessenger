@@ -8,10 +8,7 @@ import com.example.socketmessenger.util.enums.SuccessCode;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -20,10 +17,10 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("checkDuplicateId")
-    public ResponseEntity<?> checkDuplicateId(CheckDuplicateIdDto checkDuplicateIdDto) {
-        authService.checkDuplicateId(checkDuplicateIdDto); // 토큰 블랙리스트 등 처리
-        return ResponseUtil.createSuccessResponse(SuccessCode.SELECT_SUCCESS);
+    @PostMapping("/checkDuplicateId")
+    public ResponseEntity<?> checkDuplicateId(@RequestBody CheckDuplicateIdDto checkDuplicateIdDto) {
+        boolean isDuplicateId = authService.checkDuplicateId(checkDuplicateIdDto);
+        return ResponseUtil.createSuccessResponse(SuccessCode.SELECT_SUCCESS, isDuplicateId);
     }
 
     @PostMapping("/logout")
