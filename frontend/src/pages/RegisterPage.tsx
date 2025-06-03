@@ -1,0 +1,69 @@
+import { useState } from "react";
+import { register, checkDuplicateId } from "../api/auth";
+import { useNavigate } from "react-router-dom";
+
+export default function RegisterPage() {
+    const [accountId, setAccountId] = useState("");
+    const [password, setPassword] = useState("");
+    const [duplicateChecked, setDuplicateChecked] = useState(false);
+    const [isDuplicate, setIsDuplicate] = useState<boolean | null>(null);
+
+    const navigate = useNavigate();
+
+    const handleCheckDuplicate = async () => {
+        try {
+            const isDuplicate = await checkDuplicateId(accountId);
+            setIsDuplicate(isDuplicate);
+            setDuplicateChecked(true);
+
+        } catch (e) {
+            alert("중복 확인 실패");
+            console.error(e);
+        }
+    };
+
+    const handleRegister = async () => {
+        if (isDuplicate) {
+            alert("이미 사용 중인 아이디입니다");
+            return;
+        }
+        try {
+            await register(accountId, password);
+            alert("회원가입 성공");
+            navigate("/login");
+        } catch {
+            alert("회원가입 실패");
+        }
+    };
+
+    return (
+        <div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+                <input
+                    value={accountId}
+                    onChange={(e) => {
+                        setAccountId(e.target.value);
+                        setDuplicateChecked(false); // 아이디 바꾸면 다시 확인해야 함
+                    }}
+                    placeholder="아이디"
+                />
+                <button onClick={handleCheckDuplicate} style={{ marginLeft: "8px" }}>
+                    중복 확인
+                </button>
+            </div>
+            {duplicateChecked && isDuplicate === false && <div style={{ color: "green" }}>사용 가능한 아이디입니다.</div>}
+            {duplicateChecked && isDuplicate === true && <div style={{ color: "red" }}>이미 사용 중인 아이디입니다.</div>}
+
+            <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                placeholder="비밀번호"
+                style={{ display: "block", marginTop: "12px" }}
+            />
+            <button onClick={handleRegister} style={{ marginTop: "8px" }}>
+                회원가입
+            </button>
+        </div>
+    );
+}
