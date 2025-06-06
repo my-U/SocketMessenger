@@ -1,7 +1,7 @@
 package com.example.socketmessenger;
 
 import com.example.socketmessenger.auth.service.JwtService;
-import com.example.socketmessenger.config.RedisPublisher;
+import com.example.socketmessenger.chat.ChatRoomService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -15,9 +15,9 @@ public class SocketMessengerApplication {
 		ConfigurableApplicationContext context = SpringApplication.run(SocketMessengerApplication.class, args);
 
 		JwtService jwtService = context.getBean(JwtService.class);
-		RedisPublisher redisPublisher = context.getBean(RedisPublisher.class);
+		ChatRoomService chatRoomService = context.getBean(ChatRoomService.class);
 
-		nettyServer = new NettyServer(jwtService, redisPublisher);
+		nettyServer = new NettyServer(jwtService, chatRoomService);
 		nettyServer.start();
 	}
 }
