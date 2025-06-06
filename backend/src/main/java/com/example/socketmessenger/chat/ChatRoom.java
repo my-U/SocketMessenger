@@ -1,5 +1,8 @@
 package com.example.socketmessenger.chat;
 
+import lombok.Getter;
+
+@Getter
 public class ChatRoom {
     private final String roomId;
     private final String roomName;
@@ -9,11 +12,5 @@ public class ChatRoom {
         this.roomName = roomName;
     }
 
-    public String getRoomId() {
-        return roomId;
-    }
 
-    public String getRoomName() {
-        return roomName;
-    }
 }

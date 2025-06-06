@@ -22,7 +22,7 @@ public class ChatRoomController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createRoom(@RequestParam String roomName) {
-        String roomId = chatRoomService.createRoom(roomName);
-        return ResponseUtil.createSuccessResponse(SuccessCode.INSERT_SUCCESS, Map.of("roomId", roomId));
+        ChatRoom chatRoom = chatRoomService.createRoom(roomName);
+        return ResponseUtil.createSuccessResponse(SuccessCode.INSERT_SUCCESS, chatRoom);
     }
 }

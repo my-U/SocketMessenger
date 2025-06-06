@@ -30,11 +30,12 @@ public class ChatRoomService {
     /**
      * 새로운 채팅방 생성
      */
-    public String createRoom(String roomName) {
+    public ChatRoom createRoom(String roomName) {
         String roomId = UUID.randomUUID().toString();
-        chatRoomMap.put(roomId, new ChatRoom(roomId, roomName));
+        ChatRoom chatRoom = new ChatRoom(roomId, roomName);
+        chatRoomMap.put(roomId, chatRoom);
         roomChannelMap.put(roomId, ConcurrentHashMap.newKeySet());
-        return roomId;
+        return chatRoom;
     }
 
     /**
