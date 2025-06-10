@@ -1,20 +1,18 @@
-import axios from "axios";
-
-const BASE_URL = "http://localhost:8080/chat/rooms";
+import api from "./api";
+import { ApiResponse } from "./types/response";
 
 export interface ChatRoom {
     roomId: string;
     roomName: string;
 }
-
 export const getChatRooms = async (): Promise<ChatRoom[]> => {
-    const res = await axios.get<ChatRoom[]>(`${BASE_URL}/list`);
-    return res.data;
+    const res = await api.get<ApiResponse<ChatRoom[]>>("/chat/rooms/list");
+    return res.data.data; // 여기가 배열이어야 함
 };
 
 export const createChatRoom = async (roomName: string): Promise<ChatRoom> => {
-    const res = await axios.post<ChatRoom>(`${BASE_URL}/create`, null, {
+    const res = await api.post<ApiResponse<ChatRoom>>(`/chat/rooms/create`, null, {
         params: { roomName },
     });
-    return res.data;
+    return res.data.data;
 };

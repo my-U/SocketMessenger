@@ -9,8 +9,10 @@ export default function LoginPage() {
 
     const handleLogin = async () => {
         try {
-            const { token } = await login(accountId, password);
-            localStorage.setItem("jwt", token);
+            const response = await login(accountId, password);
+            const token = response.data.tokenResponseDto.accessToken;
+
+            localStorage.setItem("accessToken", token);
             navigate("/chat-room-list");
         } catch (err:any) {
             alert("로그인 실패");
