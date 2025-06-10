@@ -10,11 +10,11 @@ function App() {
       <Router>
         <Routes>
           <Route path="/chat-room-list" element={<ChatRoomListPage />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </Router>
   );
 }
 
-export default App;
+export default App
