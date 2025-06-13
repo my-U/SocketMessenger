@@ -44,7 +44,7 @@ public class RoomHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             }
 
             ctx.channel().attr(AttributeKey.valueOf("roomId")).set(roomId);
-            ctx.channel().attr(AttributeKey.valueOf("userId")).set(accountId);
+            ctx.channel().attr(AttributeKey.valueOf("accountId")).set(accountId);
 
             chatRoomService.addUserChannel(roomId, accountId, ctx.channel());
         } else {
