@@ -1,10 +1,11 @@
 package com.example.socketmessenger.chat;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import io.netty.util.AttributeKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ import java.util.Set;
 public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
     private final ChatRoomService chatRoomService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * 클라이언트로부터 수신한 채팅 메시지를 같은 채팅방에 연결된 모든 사용자에게 브로드캐스트하는 메서드
@@ -32,13 +34,31 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) {
         String message = msg.text();
-        String roomId = (String) ctx.channel().attr(AttributeKey.valueOf("roomId")).get();
 
-        if (roomId != null) {
-            Set<Channel> receivers = chatRoomService.getChannelSet(roomId);
-            for (Channel channel : receivers) {
-                channel.writeAndFlush(new TextWebSocketFrame(message));
+        try {
+            JsonNode root = objectMapper.readTree(message); // 프론트가 보낸 JSON 문자열을 파싱하여 JSON 객체로 변환
+
+            String type = root.get("type").asText(); // type 필드 추출 (예: "MESSAGE")
+
+            if (!"MESSAGE".equals(type)) {
+                ctx.writeAndFlush(new TextWebSocketFrame("지원하지 않는 메시지 타입입니다."));
+                return;
             }
+
+            String roomId = root.get("roomId").asText();
+            String sender = root.get("sender").asText();
+            String content = root.get("content").asText();
+
+            Set<Channel> receivers = chatRoomService.getChannelSet(roomId); // 채팅방 참여자 목록 가져옴
+
+            if (receivers != null) {
+                String formatted = sender + ": " + content;
+                for (Channel ch : receivers) {
+                    ch.writeAndFlush(new TextWebSocketFrame(formatted));
+                }
+            }
+        } catch (Exception e) {
+            ctx.writeAndFlush(new TextWebSocketFrame("메시지 파싱 실패: " + e.getMessage()));
         }
-    }
+     }
 }
