@@ -12,7 +12,7 @@ export const login = async (
 };
 
 export const register = async (accountId: string, password: string) => {
-    const res = await axios.post(`/member/register`, {
+    const res = await api.post(`/member/register`, {
         accountId,
         password,
     });
@@ -21,10 +21,10 @@ export const register = async (accountId: string, password: string) => {
 
 export const checkDuplicateId = async (
     accountId: string
-): Promise<boolean> => {
-    const res = await axios.post<{ status: number; message: string; data: boolean }>(
+): Promise<ApiResponse<boolean>> => {
+    const res = await api.post<ApiResponse<boolean>>(
         `/auth/checkDuplicateId`,
         { accountId }
     );
-    return res.data.data;
+    return res.data;
 };
