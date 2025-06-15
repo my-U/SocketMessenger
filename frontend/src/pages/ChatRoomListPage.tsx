@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChatRoom, getChatRooms, createChatRoom } from "../api/chat";
+import { getChatRooms, createChatRoom } from "../api/chat";
+import { ChatRoom } from "../api/types/chat";
+import './ChatRoomListPage.css';
 
 export default function ChatRoomListPage() {
     const [rooms, setRooms] = useState<ChatRoom[]>([]);
@@ -40,18 +42,18 @@ export default function ChatRoomListPage() {
     };
 
     return (
-        <div>
+        <div className="chat-list-container">
             <h2>채팅방 목록</h2>
 
             {rooms.length === 0 ? (
-                <p style={{ color: "#888", marginTop: "12px" }}>
+                <p className="empty-message">
                     채팅방이 없습니다.
                 </p>
             ) : (
-                <ul>
+                <ul className="room-list">
                     {rooms.map((room) => (
                         <li key={room.roomId}>
-                            <button onClick={() => navigate(`/chat/${room.roomId}`, { state: { roomName: room.roomName } })}>
+                            <button className="room-button" onClick={() => navigate(`/chat/${room.roomId}`, { state: { roomName: room.roomName } })}>
                                 {room.roomName}
                             </button>
                         </li>
@@ -59,13 +61,14 @@ export default function ChatRoomListPage() {
                 </ul>
             )}
 
-            <div style={{ marginTop: "16px" }}>
+            <div className="create-room-group">
                 <input
+                    className="room-input"
                     value={roomName}
                     onChange={(e) => setRoomName(e.target.value)}
                     placeholder="방 이름 입력"
                 />
-                <button onClick={handleCreateRoom} style={{ marginLeft: "8px" }}>
+                <button className="create-button" onClick={handleCreateRoom} style={{ marginLeft: "8px" }}>
                     방 생성
                 </button>
             </div>

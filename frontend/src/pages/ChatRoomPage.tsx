@@ -1,20 +1,32 @@
 import { useEffect, useState, useRef } from "react";
 import {useLocation, useParams} from "react-router-dom";
 import {getMemberInfo} from "../api/member";
+import { ChatMessage } from "../api/types/chat";
+import './ChatRoomPage.css';
 
 const ChatRoomPage = () => {
     const { roomId } = useParams();
     const location = useLocation();
     const roomName = location.state?.roomName;
     const [accountId, setAccountId] = useState<string | null>(null);
-    const [messages, setMessages] = useState<string[]>([]);
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [input, setInput] = useState("");
     const socketRef = useRef<WebSocket | null>(null);
+    const endRef = useRef<HTMLDivElement | null>(null);
+
+    const isConnectedRef = useRef(false);
 
     useEffect(() => {
-        const socket = new WebSocket("ws://localhost:9090/ws");
 
+        if (isConnectedRef.current) {
+            console.log("이미 연결된 상태");
+            return;
+        }
+
+        const socket = new WebSocket("ws://localhost:9090/ws");
         socketRef.current = socket;
+        isConnectedRef.current = true;
+
 
         socket.onopen = async () => {
             console.log("WebSocket 연결됨");
@@ -22,10 +34,7 @@ const ChatRoomPage = () => {
             try {
                 const response = await getMemberInfo();
                 const accountId = response.data.accountId;
-
                 setAccountId(accountId);
-
-                // 방 입장 명령 전송
                 socket.send(`/join ${roomId} ${accountId}`);
             } catch (err) {
                 console.error("회원 정보 조회 실패", err);
@@ -34,7 +43,12 @@ const ChatRoomPage = () => {
         };
 
         socket.onmessage = (event) => {
-            setMessages((prev) => [...prev, event.data]);
+            try {
+                const parsed: ChatMessage = JSON.parse(event.data);
+                setMessages((prev) => [...prev, parsed]);
+            } catch (e) {
+                console.error("메시지 파싱 실패", e);
+            }
         };
 
         socket.onerror = (err) => {
@@ -43,12 +57,19 @@ const ChatRoomPage = () => {
 
         socket.onclose = () => {
             console.log("WebSocket 종료");
+            isConnectedRef.current = false;
         };
 
         return () => {
             socket.close();
+            isConnectedRef.current = false;
         };
     }, [roomId]);
+
+
+    useEffect(() => {
+        endRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
 
     const sendMessage = () => {
         if (!accountId) {
@@ -78,19 +99,29 @@ const ChatRoomPage = () => {
     };
 
     return (
-        <div>
-            <h2>{roomName}</h2>
-            <div style={{ border: "1px solid #ccc", height: "300px", overflowY: "scroll" }}>
-                {messages.map((msg, idx) => (
-                    <div key={idx}>{msg}</div>
-                ))}
+        <div className="chat-room-container">
+            <h2 className="room-title">{roomName}</h2>
+            <div className="chat-box">
+                {messages.map((msg, idx) => {
+                    const isMine = msg.sender === accountId;
+                    return (
+                        <div
+                            key={idx}
+                            className={`chat-message ${isMine ? 'mine' : 'theirs'}`}
+                        >
+                            {msg.content}
+                        </div>
+                    );
+                })}
+                <div ref={endRef} />
             </div>
             <input
+                className="chat-input"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendMessage()}
             />
-            <button onClick={sendMessage}>전송</button>
+            <button className="chat-send-button" onClick={sendMessage}>전송</button>
         </div>
     );
 };

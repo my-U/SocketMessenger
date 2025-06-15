@@ -1,0 +1,73 @@
+.chat-list-container {
+    max-width: 480px;
+    margin: 80px auto;
+    padding: 32px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: sans-serif;
+}
+
+.chat-list-container h2 {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.empty-message {
+    text-align: center;
+    color: #888;
+    margin-top: 12px;
+}
+
+.room-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+}
+
+.room-list li {
+    margin-bottom: 12px;
+}
+
+.room-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.room-button:hover {
+    background-color: #d9d9d9;
+}
+
+.create-room-group {
+    display: flex;
+    gap: 8px;
+}
+
+.room-input {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.create-button {
+    padding: 10px 16px;
+    font-size: 14px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.create-button:hover {
+    background-color: #218838;
+}

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { login } from "../api/auth";
 import { useNavigate } from "react-router-dom";
+import '../styles/FormCommon.css';
+import './LoginPage.css';
 
 export default function LoginPage() {
     const [accountId, setAccountId] = useState("");
@@ -21,10 +23,10 @@ export default function LoginPage() {
     };
 
     return (
-        <div>
-            <input value={accountId} onChange={(e) => setAccountId(e.target.value)} placeholder="아이디" />
-            <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="비밀번호" />
-            <button onClick={handleLogin}>로그인</button>
+        <div className="form-container">
+            <input className="input-block" value={accountId} onChange={(e) => setAccountId(e.target.value)} placeholder="아이디" />
+            <input className="input-block" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleLogin()} type="password" placeholder="비밀번호" />
+            <button className="submit-button" onClick={handleLogin}>로그인</button>
         </div>
     );
 }
