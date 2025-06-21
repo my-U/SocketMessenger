@@ -2,6 +2,7 @@ package com.example.socketmessenger.chat;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -52,9 +53,14 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             Set<Channel> receivers = chatRoomService.getChannelSet(roomId); // 채팅방 참여자 목록 가져옴
 
             if (receivers != null) {
-                String formatted = sender + ": " + content;
+                ObjectNode jsonMessage = objectMapper.createObjectNode();
+                jsonMessage.put("sender", sender);
+                jsonMessage.put("content", content);
+
+                String jsonString = jsonMessage.toString();
+
                 for (Channel ch : receivers) {
-                    ch.writeAndFlush(new TextWebSocketFrame(formatted));
+                    ch.writeAndFlush(new TextWebSocketFrame(jsonString));
                 }
             }
         } catch (Exception e) {
