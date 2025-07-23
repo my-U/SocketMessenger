@@ -2,7 +2,6 @@ import { useState } from "react";
 import { login } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 import '../styles/FormCommon.css';
-import './LoginPage.css';
 
 export default function LoginPage() {
     const [accountId, setAccountId] = useState("");
@@ -18,7 +17,7 @@ export default function LoginPage() {
             navigate("/chat-room-list");
         } catch (err:any) {
             alert("로그인 실패");
-            alert(err.message());
+            alert(err.message);
         }
     };
 
