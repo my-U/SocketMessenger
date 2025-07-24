@@ -73,7 +73,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: myouth/SocketMessenger:latest # 🔧 Docker Hub에 맞게 사용자명과 이미지명을 수정하세요.
+          tags: myouth/socketmessenger:latest # 🔧 Docker Hub에 맞게 사용자명과 이미지명을 수정하세요.
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -124,7 +124,7 @@ jobs:
             cat .env.prod .env.common > .env
             
             # 최신 이미지 pull + 컨테이너 재시작
-            docker pull myouth/SocketMessenger:latest
+            docker pull myouth/socketmessenger:latest
             docker compose -f docker-compose.prod.yml up -d
  
             # 사용되지 않는(dangling) 이미지 정리
