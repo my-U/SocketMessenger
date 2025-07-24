@@ -62,12 +62,11 @@ services: # 생성되는 순서 중요
 
   # Spring Boot 애플리케이션
   app: # 🔧 프로젝트에 맞게 값을 설정 해주세요.
-    image: SocketMessenger:latest # 🔧 프로젝트에 맞게 값을 설정 해주세요.
-    container_name: app-SocketMessenger # 🔧 프로젝트에 맞게 값을 설정 해주세요.
+    image: myouth/socketmessenger:latest # 🔧 프로젝트에 맞게 값을 설정 해주세요.
+    container_name: socketmessenger # 🔧 프로젝트에 맞게 값을 설정 해주세요.
     ports:
       - "8080:8080"
     depends_on:
-#      - mysql
       - postgres  # 사용할 DB에 따라 주석 처리 조정
       - redis
     env_file:
