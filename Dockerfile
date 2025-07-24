@@ -4,7 +4,7 @@
 # 프로젝트에 맞게 값을 입력하여 사용하세요.
 
 # Ubuntu 기반 (Ubuntu 22.04, Jammy Jellyfish)
-#FROM eclipse-temurin:21-jdk-jammy
+FROM eclipse-temurin:21-jdk-jammy
 
 # Debian Slim
 # FROM eclipse-temurin:21-jdk
