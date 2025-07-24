@@ -28,7 +28,7 @@ FROM eclipse-temurin:21-jdk-jammy
 WORKDIR /app
 
 # 빌드된 JAR 파일을 복사 (예: build/libs/my-app.jar)
-ARG JAR_FILE=build/libs/*.jar
+ARG JAR_FILE=backend/build/libs/*.jar
 COPY ${JAR_FILE} app.jar
 
 # 애플리케이션 실행
