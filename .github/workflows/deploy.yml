@@ -114,7 +114,7 @@ jobs:
             cd ~/SocketMessenger # 🔧 프로젝트별 docker-compose.yml 파일을 다운 받을 디렉토리로 수정하세요.
             
             # docker-compose.yml 다운로드
-            curl -o docker-compose.prod.yml https://raw.githubusercontent.com/my-U/SocketMessenger/master/docker-compose.prod.yml  # 🔧 사용자명, 레포명, 브랜치명을 실제 환경에 맞게 수정하세요.
+            curl -o docker-compose.prod.yml https://raw.githubusercontent.com/my-U/SocketMessenger/main/docker-compose.prod.yml  # 🔧 사용자명, 레포명, 브랜치명을 실제 환경에 맞게 수정하세요.
             
             # .env 파일 복원
             echo "${{ secrets.ENV_COMMON_FILE }}" | base64 --decode > .env.common
