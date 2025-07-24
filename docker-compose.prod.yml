@@ -8,7 +8,6 @@ services: # 생성되는 순서 중요
   # MySQL 서비스
 #  mysql:
 #    image: mysql:8.0
-#    container_name: mysql-container # 🔧 프로젝트에 맞게 값을 설정 해주세요.
 #    environment:
 #      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 #      MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -22,7 +21,6 @@ services: # 생성되는 순서 중요
   # PostgreSQL 서비스 (필요 시 주석 해제)
   postgres:
      image: postgres:15
-     container_name: postgresql-container # 🔧 프로젝트에 맞게 값을 설정 해주세요.
      environment:
        POSTGRES_DB: ${POSTGRESQL_DATABASE}
        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -34,7 +32,6 @@ services: # 생성되는 순서 중요
 
   kafka:
     image: confluentinc/cp-kafka:latest
-    container_name: kafka-container # 🔧 프로젝트에 맞게 값을 설정 해주세요.
     depends_on:
       - zookeeper
     environment:
@@ -47,7 +44,6 @@ services: # 생성되는 순서 중요
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper-container # 🔧 프로젝트에 맞게 값을 설정 해주세요.
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
     ports:
@@ -56,7 +52,6 @@ services: # 생성되는 순서 중요
   # Redis 서비스
   redis:
     image: redis:latest
-    container_name: redis-container # 🔧 프로젝트에 맞게 값을 설정 해주세요.
     ports:
       - "6379:6379"
 
