@@ -119,10 +119,6 @@ jobs:
             # .env 파일 복원
             echo "${{ secrets.ENV_COMMON_FILE }}" | base64 --decode > .env.common
             echo "${{ secrets.ENV_PROD_FILE }}" | base64 --decode > .env.prod
-
-            # DB 사용자 계정 생성 스크립트 복원
-            mkdir -p ./postgresql-init
-            echo "${{ secrets.POSTGRESQL_PROD_SQL }}" | base64 --decode > ./postgresql-init/init-prod.sql
           
             # .env 파일로 합치기 - docker-compose.yml 파일의 ${VAR} 형식은 .env 파일만 인식하기 때문
             cat .env.prod .env.common > .env
