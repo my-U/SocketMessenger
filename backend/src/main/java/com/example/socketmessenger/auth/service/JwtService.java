@@ -21,11 +21,11 @@ public class JwtService {
     @Value("${jwt.secret-key}")
     private String SECRET_KEY;
 
-    @Value("${jwt.access.expiration-time}")
-    private long ACCESS_EXPIRATION_TIME;
-
     @Value("${jwt.refresh.expiration-time}")
     private long REFRESH_EXPIRATION_TIME;
+
+    @Value("${jwt.access.expiration-time}")
+    private long ACCESS_EXPIRATION_TIME;
 
     @Value("${jwt.access.header}")
     private String ACCESS_HEADER;
