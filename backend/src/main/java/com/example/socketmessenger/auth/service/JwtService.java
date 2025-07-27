@@ -18,19 +18,19 @@ import java.util.Optional;
 @Slf4j
 @Component
 public class JwtService {
-    @Value("${jwt.SECRET_KEY}")
+    @Value("${jwt.secret-key}")
     private String SECRET_KEY;
 
-    @Value("${jwt.ACCESS.EXPIRATION_TIME}")
+    @Value("${jwt.access.expiration-time}")
     private long ACCESS_EXPIRATION_TIME;
 
-    @Value("${jwt.REFRESH.EXPIRATION_TIME}")
+    @Value("${jwt.refresh.expiration-time}")
     private long REFRESH_EXPIRATION_TIME;
 
-    @Value("${jwt.ACCESS.HEADER}")
+    @Value("${jwt.access.header}")
     private String ACCESS_HEADER;
 
-    @Value("${jwt.TOKEN_PREFIX}")
+    @Value("${jwt.token-prefix}")
     private String TOKEN_PREFIX;
     private Algorithm algorithm;
     private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
