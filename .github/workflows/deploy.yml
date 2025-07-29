@@ -34,8 +34,8 @@ jobs:
 
       - name: Create application-secret.yml # application-secret.yml 복원
         run: | # 🔧 사용하는 DB에 따라 맞게 수정하세요.
-          mkdir -p .backend/src/main/resources
-          echo "${{ secrets.SECRET_FILE }}" | base64 --decode > .backend/src/main/resources/application-secret.yml  
+          mkdir -p backend/src/main/resources
+          echo "${{ secrets.SECRET_FILE }}" | base64 --decode > backend/src/main/resources/application-secret.yml  
 
       - name: Set executable permissions for gradlew  # 테스트 코드 실행을 위해 gradlew 실행 권한 부여
         run: chmod +x ./gradlew
