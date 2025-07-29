@@ -70,7 +70,7 @@ jobs:
 
       - name: Check application-secret.yml in JAR
         run: |
-          JAR_PATH=$(find build/libs -name "*.jar" | head -n 1)
+          JAR_PATH=$(find backend/build/libs -name "*.jar" | head -n 1)
           echo "Checking JAR: $JAR_PATH"
           jar -tf "$JAR_PATH" | grep application-secret || {
             echo "❌ application-secret.yml NOT found in JAR"
