@@ -37,6 +37,7 @@ services: # 생성되는 순서 중요
     container_name: socketmessenger # 🔧 프로젝트에 맞게 값을 설정 해주세요.
     ports:
       - "8080:8080"
+      - "9090:9090"
     env_file:
       - .env.common
       - .env.prod
