@@ -40,6 +40,8 @@ services: # 생성되는 순서 중요
     env_file:
       - .env.common
       - .env.prod
+    depends_on:
+      - redis
     environment:  # 🔧 프로젝트에 맞게 .env.prod 파일의 값으로 변경해주세요.
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL_POSTGRESQL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME_POSTGRESQL}
