@@ -20,10 +20,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtHandshakeHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
-    @Value("${jwt.ACCESS.HEADER}")
+    @Value("${jwt.access.header}")
     private String ACCESS_HEADER;
 
-    @Value("${jwt.TOKEN_PREFIX}")
+    @Value("${jwt.token-prefix}")
     private String TOKEN_PREFIX;
 
     private static final String ACCOUNT_CLAIM = "accountId";

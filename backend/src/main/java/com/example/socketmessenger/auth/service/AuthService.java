@@ -21,10 +21,10 @@ public class AuthService {
     private final RedisTemplate<String, String> redisTemplate;
     private final MemberRepository memberRepository;
 
-    @Value("${jwt.TOKEN_PREFIX}")
+    @Value("${jwt.token-prefix}")
     private String TOKEN_PREFIX;
 
-    @Value("${jwt.USE_BLACKLIST}")
+    @Value("${jwt.use-blacklist}")
     private boolean useBlacklist;
 
     /**

@@ -31,13 +31,13 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final MemberRepository memberRepository;
     private final RedisTemplate<String, String> redisTemplate;
 
-    @Value("${jwt.TOKEN_PREFIX}")
+    @Value("${jwt.token-prefix}")
     private String TOKEN_PREFIX;
 
     @Value("${media-type.json}")
     private String mediaTypeJson;
 
-    @Value("${jwt.REFRESH.EXPIRATION_TIME}")
+    @Value("${jwt.refresh.expiration-time}")
     private long REFRESH_EXPIRATION_TIME;
 
     @Override
