@@ -23,7 +23,7 @@ const ChatRoomPage = () => {
             return;
         }
 
-        const socket = new WebSocket("ws://52.79.209.9:9090/ws");
+        const socket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL!);
         socketRef.current = socket;
         isConnectedRef.current = true;
 
