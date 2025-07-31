@@ -145,6 +145,7 @@ jobs:
             
             # 최신 이미지 pull + 컨테이너 재시작
             docker pull myouth/socketmessenger:latest
+            docker pull myouth/socketmessenger-frontend:latest
             docker compose -f docker-compose.prod.yml up -d
  
             # 사용되지 않는(dangling) 이미지 정리
