@@ -86,6 +86,16 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Build and Push Frontend Docker image
+        uses: docker/build-push-action@v6.9.0
+        with:
+          context: ./frontend
+          push: true
+          tags: myouth/socketmessenger-frontend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+
       # Slack 알림 기능 사용 시 주석 해제
 #      - name: Send Slack notification for build
 #        if: always()

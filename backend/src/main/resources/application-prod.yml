@@ -43,7 +43,6 @@ logging:
         beans: INFO
         jdbc.core.JdbcTemplate: WARN
         transaction: WARN
-        boot.context.config: DEBUG
       hibernate:
         SQL: WARN
         type.descriptor.sql.BasicBinder: OFF
