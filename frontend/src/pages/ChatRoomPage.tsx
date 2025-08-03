@@ -23,7 +23,10 @@ const ChatRoomPage = () => {
             return;
         }
 
-        const socket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL!);
+        const url = process.env.REACT_APP_WEBSOCKET_URL;
+        if (!url) throw new Error('Missing REACT_APP_WEBSOCKET_URL');
+        const socket = new WebSocket(url);
+
         socketRef.current = socket;
         isConnectedRef.current = true;
 
