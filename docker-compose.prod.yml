@@ -30,6 +30,7 @@ services: # 생성되는 순서 중요
     image: redis:latest
     ports:
       - "6379:6379"
+    restart: always
 
   # Spring Boot 애플리케이션
   backend: # 🔧 프로젝트에 맞게 값을 설정 해주세요.
