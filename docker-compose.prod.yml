@@ -45,7 +45,6 @@ services: # 생성되는 순서 중요
       - .env.prod
     depends_on:
       - redis
-    restart: always
     environment:  # 🔧 프로젝트에 맞게 .env.prod 파일의 값으로 변경해주세요.
       SPRING_CONFIG_IMPORT: classpath:application-secret.yml
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL_POSTGRESQL}
