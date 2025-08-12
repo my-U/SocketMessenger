@@ -62,3 +62,4 @@ services: # 생성되는 순서 중요
     mem_limit: 64m
     ports:
       - "3000:3000"
+    restart: always
