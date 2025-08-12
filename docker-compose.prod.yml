@@ -3,6 +3,7 @@
 # 'docker-compose.prod.yml'로 이름을 바꾸고
 # 프로젝트에 맞게 값을 입력하여 사용하세요.
 
+version: "2.4"
 services: # 생성되는 순서 중요
 
 #  kafka:
@@ -18,20 +19,22 @@ services: # 생성되는 순서 중요
 #    ports:
 #      - "9092:9092"
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-    ports:
-      - "2181:2181"
-    restart: always
+#  zookeeper:
+#    image: confluentinc/cp-zookeeper:latest
+#    environment:
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#    ports:
+#      - "2181:2181"
+#    restart: always
 
   # Redis 서비스
   redis:
     image: redis:latest
+    mem_limit: 64m
+    command: >
+      redis-server --maxmemory 64mb --maxmemory-policy allkeys-lru --appendonly no
     ports:
       - "6379:6379"
-    restart: always
 
   # Spring Boot 애플리케이션
   backend: # 🔧 프로젝트에 맞게 값을 설정 해주세요.
@@ -45,6 +48,7 @@ services: # 생성되는 순서 중요
       - .env.prod
     depends_on:
       - redis
+    mem_limit: 384m
     environment:  # 🔧 프로젝트에 맞게 .env.prod 파일의 값으로 변경해주세요.
       SPRING_CONFIG_IMPORT: classpath:application-secret.yml
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL_POSTGRESQL}
@@ -55,6 +59,6 @@ services: # 생성되는 순서 중요
 
   frontend:
     image: myouth/socketmessenger-frontend:latest
+    mem_limit: 64m
     ports:
       - "3000:3000"
-    restart: always
